@@ -1,2 +1,0 @@
-const t=document.querySelector("[data-start]"),e=document.querySelector("[data-stop]");let a;function r(t){null==t.target.dataset.stop&&(n(),a=setInterval(n,1e3)),null==t.target.dataset.start&&clearInterval(a)}function n(){document.querySelector("body").style.backgroundColor=`#${Math.floor(16777215*Math.random()).toString(16)}`}t.addEventListener("click",r),e.addEventListener("click",r);
-//# sourceMappingURL=01-color-switcher.7de504db.js.map
