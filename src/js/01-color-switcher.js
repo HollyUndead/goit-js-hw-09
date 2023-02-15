@@ -5,7 +5,7 @@ function getRandomHexColor() {
 
 const btnStart = document.querySelector('[data-start]')
 const btnStop = document.querySelector('[data-stop]')
-
+btnStop.disabled = true;
 
 btnStart.addEventListener('click', startStopSwitch)
 btnStop.addEventListener('click', startStopSwitch)
@@ -13,14 +13,14 @@ let timer;
 
 function startStopSwitch(event){
     if(event.target.dataset.stop == undefined){
-        document.querySelector('[data-start]').disabled = true;
-        document.querySelector('[data-stop]').disabled = false;
+        btnStart.disabled = true;
+        btnStop.disabled = false;
         switchColor()
         timer = setInterval(switchColor, 1000)
     }
     if(event.target.dataset.start == undefined){
-        document.querySelector('[data-stop]').disabled = true;
-        document.querySelector('[data-start]').disabled = false;
+        btnStop.disabled = true;
+        btnStart.disabled = false;
         clearInterval(timer)
     }
 }
