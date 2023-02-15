@@ -29,8 +29,7 @@ let minutesTime =document.querySelector('[data-minutes]')
 let hoursTime =document.querySelector('[data-hours]')
 let daysTime =document.querySelector('[data-days]')
 let currentDate = new Date();
-let selectedDate, secondsTimer, timeObj;
-startCountDown.disabled = true
+let selectedDate, timer, timeObj, indicator = false;
 
 
 
@@ -40,28 +39,24 @@ const options = {
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-        if (currentDate > selectedDates[0]){
-            alert('Please choose a date in the future')
-            return
-        }
-        if(currentDate < selectedDates[0]){
-            startCountDown.disabled = false;
-            selectedDate = selectedDates[0];
-        }
+        selectedDate = selectedDates[0];
+        indicator = false
+        startTimer()
     },
 };
 
 flatpickr(date, options)
 
-startCountDown.addEventListener('click', startTimer)
+startCountDown.addEventListener('click', renderCountdown)
 
 
-function startTimer(){
-    timeObj = convertMs(selectedDate-currentDate)
-    console.log(selectedDate-currentDate);
-    console.log(timeObj);
-    clearInterval(secondsTimer);
-    secondsTimer = setInterval(minusOne, 1000)
+function renderCountdown(){
+    currentDate = new Date();
+    if (currentDate > selectedDate){
+        alert('Please choose a date in the future')
+        return
+    }
+    indicator = true
     daysTime.innerText = addLeadingZero(timeObj.days)
     hoursTime.innerText = addLeadingZero(timeObj.hours)
     minutesTime.innerText = addLeadingZero(timeObj.minutes)
@@ -69,30 +64,55 @@ function startTimer(){
 }
 
 
+function startTimer(){
+    if (currentDate > selectedDate){
+        alert('Please choose a date in the future')
+        return
+    }
+    timeObj = convertMs(selectedDate-currentDate)
+    clearInterval(timer);
+    timer = setInterval(minusOne, 1000)
+    
+}
+
+
 
 
 function minusOne(){
-    secondsTime = document.querySelector(`[data-seconds]`)
-    secondsTime.innerText = addLeadingZero(secondsTime.innerText-1)
-    if(daysTime.innerText == 0 && hoursTime.innerText == 0 && minutesTime.innerText == 0 && secondsTime.innerText == 0){
+    let secondsTimer = timeObj.seconds;
+    let minutesTimer = timeObj.minutes;
+    let hoursTimer = timeObj.hours;
+    let daysTimer = timeObj.days
+    timeObj.seconds = timeObj.seconds-1
+    console.log(timeObj.seconds);
+    if(timeObj.days == 0 && timeObj.hours == 0 && timeObj.minutes == 0 && timeObj.seconds == 0){
         secondsTime.innerText = '00';
         minutesTime.innerText = '00';
         hoursTime.innerText = '00';
         daysTime.innerText = '00'
-        clearInterval(secondsTimer)
-        alert('Time is up')
+        clearInterval(timer)
+        if(indicator === true){
+            alert('Time is up')
+        }
     }
-    if(secondsTime.innerText < 0){
-        secondsTime.innerText = '59'
-        minutesTime.innerText = addLeadingZero(minutesTime.innerText - 1)
-        if (minutesTime.innerText < 0){
-            minutesTime.innerText = '59'
-            hoursTime.innerText = addLeadingZero(minutesTime.innerText -1)
-            if(hoursTime.innerText < 0){
-                hoursTime.innerText = 23
-                daysTime.innerText = addLeadingZero(daysTime.innerText -1)
+    if(timeObj.seconds < 0){
+        timeObj.seconds = '59'
+        timeObj.minutes = timeObj.minutes - 1
+        if (timeObj.minutes < 0){
+            timeObj.minutes = '59'
+            timeObj.hours = timeObj.hours -1
+            if(timeObj.hours < 0){
+                timeObj.hours = 23
+                timeObj.days = timeObj.days -1
             }
         }
+    }
+    if(indicator === true){
+        daysTime.innerText = addLeadingZero(timeObj.days)
+        hoursTime.innerText = addLeadingZero(timeObj.hours)
+        minutesTime.innerText = addLeadingZero(timeObj.minutes)
+        secondsTime.innerText = addLeadingZero(timeObj.seconds)
+        indicator = false
     }
 }
 

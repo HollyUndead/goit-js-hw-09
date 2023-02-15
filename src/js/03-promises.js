@@ -26,16 +26,9 @@ document.querySelector('button').addEventListener('click', (event)=>{
   console.log(currentDelay);
 
   for(let i=1; i<=amount; i++){
-    if(i===1){
       createPromise(currentDelay)
       .then(({ position, delay }) =>{console.log(`✅ Fulfilled promise ${position} in ${delay}ms`)})
       .catch(({ position, delay })=> {console.log(`❌ Rejected promise ${position} in ${delay}ms`);})
       currentDelay+=step
-    }else{
-      createPromise(currentDelay)
-      .then(({ position, delay }) =>{console.log(`✅ Fulfilled promise ${position} in ${delay}ms`)})
-      .catch(({ position, delay })=> {console.log(`❌ Rejected promise ${position} in ${delay}ms`);})
-      currentDelay+=step
-    }
   }
 })
